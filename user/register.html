@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đăng Ký — Nhã Nam Books</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body class="auth-page">
+
+<div class="auth-container">
+  <div class="auth-card" style="max-width:480px">
+    <div class="auth-logo">
+      <div class="logo-icon">📚</div>
+      <div class="logo-name">Nhã Nam Books</div>
+    </div>
+    <h1 class="auth-title">Tạo Tài Khoản</h1>
+    <p class="auth-subtitle">Đăng ký để theo dõi đơn hàng và nhận ưu đãi</p>
+
+    <form onsubmit="handleRegister(event)" novalidate>
+      <div class="form-group">
+        <label>
+          <i class="fas fa-user" style="color:var(--amber);margin-right:6px"></i>
+          Họ và tên <span style="color:var(--rust)">*</span>
+        </label>
+        <input
+          type="text"
+          id="regName"
+          required
+          placeholder="Nguyễn Văn A"
+          autocomplete="name"
+        />
+      </div>
+
+      <div class="form-group">
+        <label>
+          <i class="fas fa-envelope" style="color:var(--amber);margin-right:6px"></i>
+          Email <span style="color:var(--rust)">*</span>
+        </label>
+        <input
+          type="email"
+          id="regEmail"
+          required
+          placeholder="email@gmail.com"
+          autocomplete="email"
+        />
+      </div>
+
+      <div class="form-group">
+        <label>
+          <i class="fas fa-phone" style="color:var(--amber);margin-right:6px"></i>
+          Số điện thoại
+        </label>
+        <input
+          type="tel"
+          id="regPhone"
+          placeholder="09xxxxxxxx"
+          autocomplete="tel"
+        />
+      </div>
+
+      <div class="form-row-2">
+        <div class="form-group">
+          <label>
+            <i class="fas fa-lock" style="color:var(--amber);margin-right:6px"></i>
+            Mật khẩu <span style="color:var(--rust)">*</span>
+          </label>
+          <div style="position:relative">
+            <input
+              type="password"
+              id="regPassword"
+              required
+              placeholder="Tối thiểu 6 ký tự"
+              autocomplete="new-password"
+              style="padding-right:44px"
+            />
+            <button type="button" onclick="togglePass('regPassword',this)"
+              style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--gray-400)">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>
+            <i class="fas fa-lock" style="color:var(--amber);margin-right:6px"></i>
+            Xác nhận MK <span style="color:var(--rust)">*</span>
+          </label>
+          <div style="position:relative">
+            <input
+              type="password"
+              id="regConfirm"
+              required
+              placeholder="Nhập lại mật khẩu"
+              autocomplete="new-password"
+              style="padding-right:44px"
+            />
+            <button type="button" onclick="togglePass('regConfirm',this)"
+              style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--gray-400)">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Password strength indicator -->
+      <div id="passStrength" style="margin-top:-8px;margin-bottom:12px;height:4px;border-radius:2px;background:var(--gray-200);transition:all .3s">
+        <div id="passStrengthBar" style="height:100%;border-radius:2px;width:0;transition:all .3s"></div>
+      </div>
+      <p id="passStrengthText" style="font-size:.75rem;color:var(--gray-400);margin-bottom:8px"></p>
+
+      <!-- Terms -->
+      <label style="display:flex;align-items:flex-start;gap:10px;font-size:.83rem;color:var(--gray-600);cursor:pointer;margin-bottom:4px">
+        <input type="checkbox" id="agreeTerms" required style="margin-top:3px;accent-color:var(--amber)" />
+        <span>Tôi đồng ý với <a href="#" style="color:var(--amber)">Điều khoản dịch vụ</a> và <a href="#" style="color:var(--amber)">Chính sách bảo mật</a> của Nhã Nam Books</span>
+      </label>
+
+      <p class="error-text" id="registerError"></p>
+
+      <button type="submit" class="btn-auth" id="registerBtn">
+        <i class="fas fa-user-plus"></i> Đăng ký ngay
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      Đã có tài khoản? <a href="login.html">Đăng nhập</a>
+    </div>
+    <div class="auth-footer" style="margin-top:6px">
+      <a href="index.html">← Về trang chủ</a>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/config.js"></script>
+<script src="js/auth.js"></script>
+<script>
+  // Redirect nếu đã đăng nhập
+  if (Auth.isLoggedIn()) window.location.href = 'index.html';
+
+  // Toggle show/hide password
+  function togglePass(id, btn) {
+    const input = document.getElementById(id);
+    input.type = input.type === 'password' ? 'text' : 'password';
+    btn.innerHTML = input.type === 'password'
+      ? '<i class="fas fa-eye"></i>'
+      : '<i class="fas fa-eye-slash"></i>';
+  }
+
+  // Password strength checker
+  document.getElementById('regPassword').addEventListener('input', function () {
+    const val = this.value;
+    const bar = document.getElementById('passStrengthBar');
+    const text = document.getElementById('passStrengthText');
+    let strength = 0;
+    if (val.length >= 6) strength++;
+    if (val.length >= 10) strength++;
+    if (/[A-Z]/.test(val)) strength++;
+    if (/[0-9]/.test(val)) strength++;
+    if (/[^A-Za-z0-9]/.test(val)) strength++;
+
+    const levels = [
+      { w: '0%',   c: 'transparent', t: '' },
+      { w: '25%',  c: '#ef4444', t: 'Yếu' },
+      { w: '50%',  c: '#f97316', t: 'Trung bình' },
+      { w: '75%',  c: '#eab308', t: 'Khá' },
+      { w: '100%', c: '#22c55e', t: 'Mạnh' },
+    ];
+    const lv = Math.min(strength, 4);
+    bar.style.width = levels[lv].w;
+    bar.style.background = levels[lv].c;
+    text.textContent = val ? `Độ mạnh: ${levels[lv].t}` : '';
+    text.style.color = levels[lv].c;
+  });
+</script>
+</body>
+</html>

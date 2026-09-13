@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Giỏ hàng — Nhã Nam Books</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+<header class="site-header">
+  <div class="header-main-row">
+    <div class="container">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">📚</span>
+        <div><div class="logo-name">Nhã Nam</div><div class="logo-sub">Books</div></div>
+      </a>
+      <div class="header-right" style="margin-left:auto">
+        <a href="cart.html" class="cart-btn">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-count" id="cartBadge">0</span>
+        </a>
+        <div id="authLinks"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="page-hero">
+  <div class="container">
+    <h1><i class="fas fa-shopping-cart" style="color:var(--amber);margin-right:12px"></i>Giỏ Hàng</h1>
+    <p id="cartCountLabel">Đang tải...</p>
+  </div>
+</div>
+
+<main>
+  <div class="container">
+    <div class="cart-layout" id="cartLayout">
+      <div id="cartContainer"></div>
+      <div id="cartSummary"></div>
+    </div>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+<script src="js/config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/cart.js"></script>
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+  Auth.updateHeader();
+  Cart.updateBadge();
+  renderCartPage();
+  const items = Cart.getItems();
+  document.getElementById('cartCountLabel').textContent =
+    items.length > 0 ? `${Cart.count()} sản phẩm trong giỏ hàng` : 'Giỏ hàng trống';
+  if (items.length === 0) {
+    document.getElementById('cartLayout').style.display = 'block';
+  }
+});
+</script>
+</body>
+</html>

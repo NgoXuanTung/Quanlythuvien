@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nhã Nam Books — Hiệu Sách Online</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-top-bar">
+    <div class="container">
+      <span><i class="fas fa-phone"></i> Hotline: 1800 1234 (miễn phí)</span>
+      <span><i class="fas fa-truck"></i> Free ship đơn ≥ 299k</span>
+    </div>
+  </div>
+  <div class="header-main-row">
+    <div class="container">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">📚</span>
+        <div>
+          <div class="logo-name">Nhã Nam</div>
+          <div class="logo-sub">Books</div>
+        </div>
+      </a>
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Tìm tên sách, tác giả..."
+          oninput="doSearch()" onkeypress="if(event.key==='Enter') doSearch()" />
+        <button onclick="doSearch()" aria-label="Tìm kiếm"><i class="fas fa-search"></i></button>
+      </div>
+      <div class="header-right">
+        <a href="cart.html" class="cart-btn">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-count" id="cartBadge">0</span>
+        </a>
+        <div id="authLinks"></div>
+      </div>
+    </div>
+  </div>
+  <nav class="site-nav">
+    <div class="container">
+      <a href="index.html">🏠 Trang chủ</a>
+      <a href="#" onclick="filterCat('van-hoc',null)">Văn học</a>
+      <a href="#" onclick="filterCat('kinh-te',null)">Kinh tế</a>
+      <a href="#" onclick="filterCat('ky-nang',null)">Kỹ năng</a>
+      <a href="#" onclick="filterCat('khoa-hoc',null)">Khoa học</a>
+      <a href="#" onclick="filterCat('thieu-nhi',null)">Thiếu nhi</a>
+      <a href="#" onclick="filterCat('lich-su',null)">Lịch sử</a>
+    </div>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero-section">
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <p class="hero-tag">— Bộ sưu tập mới nhất 2025 —</p>
+        <h1 class="hero-title">Mở Rộng<br/><em>Thế Giới</em><br/>Qua Từng Trang Sách</h1>
+        <p class="hero-subtitle">Hàng nghìn đầu sách chất lượng từ các tác giả trong và ngoài nước. Giao hàng nhanh toàn quốc.</p>
+        <div class="hero-cta">
+          <a href="#books" class="btn-primary" onclick="document.getElementById('books').scrollIntoView({behavior:'smooth'})">
+            <i class="fas fa-book-open"></i> Khám Phá Ngay
+          </a>
+          <a href="#" onclick="filterCat('van-hoc',null)" class="btn-outline-white">Văn Học Nổi Bật</a>
+        </div>
+      </div>
+      <div class="hero-slider" id="featuredSlider"></div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-strip">
+  <div class="container">
+      <div class="strip-stat"><strong>10,000+</strong><span>Đầu sách</span></div>
+      <div class="strip-divider"></div>
+      <div class="strip-stat"><strong>500,000+</strong><span>Khách hàng</span></div>
+      <div class="strip-divider"></div>
+      <div class="strip-stat"><strong>Miễn phí</strong><span>Ship ≥ 299k</span></div>
+      <div class="strip-divider"></div>
+      <div class="strip-stat"><strong>1-3 ngày</strong><span>Giao hàng toàn quốc</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- BOOKS SECTION -->
+<section class="books-section" id="books">
+  <div class="container">
+    <div class="section-top">
+      <h2 class="section-title">Sách Nổi Bật</h2>
+      <select class="sort-select" onchange="sortBooks(this.value)" aria-label="Sắp xếp danh sách sách">
+        <option value="">Sắp xếp theo</option>
+        <option value="popular">Bán chạy nhất</option>
+        <option value="price-asc">Giá thấp đến cao</option>
+        <option value="price-desc">Giá cao đến thấp</option>
+        <option value="new">Mới nhất</option>
+      </select>
+    </div>
+    <div class="cat-tabs" id="categoryTabs"></div>
+    <div class="books-grid" id="booksGrid">
+      <div class="loading-container">
+        <i class="fas fa-spinner fa-spin loading-icon"></i>
+        <p class="loading-text">Đang tải sách...</p>
+      </div>
+    </div>
+    <div class="pagination" id="pagination"></div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="newsletter-section">
+  <div class="container">
+    <h2>Nhận Thông Báo Sách Mới</h2>
+    <p>Đăng ký để nhận ngay ưu đãi 10% cho đơn hàng đầu tiên</p>
+    <div class="newsletter-form">
+      <input type="email" placeholder="Nhập email của bạn..." />
+      <button onclick="showToast('Đăng ký thành công! Kiểm tra email của bạn.')">Đăng Ký</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">📚 Nhã Nam Books</div>
+        <p>Mang những cuốn sách hay nhất đến tay bạn đọc Việt Nam từ năm 2008. Hơn 10,000 đầu sách đa dạng thể loại.</p>
+      </div>
+      <div>
+        <h4>Danh Mục</h4>
+        <ul>
+          <li><a href="#" onclick="filterCat('van-hoc',null)">Văn học</a></li>
+          <li><a href="#" onclick="filterCat('kinh-te',null)">Kinh tế</a></li>
+          <li><a href="#" onclick="filterCat('ky-nang',null)">Kỹ năng sống</a></li>
+          <li><a href="#" onclick="filterCat('thieu-nhi',null)">Thiếu nhi</a></li>
+          <li><a href="#" onclick="filterCat('lich-su',null)">Lịch sử</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Hỗ Trợ</h4>
+        <ul>
+          <li><a href="#">Chính sách đổi trả</a></li>
+          <li><a href="#">Hướng dẫn mua hàng</a></li>
+          <li><a href="#">Theo dõi đơn hàng</a></li>
+          <li><a href="#">Liên hệ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Kết Nối</h4>
+        <div class="social-row">
+          <a href="#" class="social-btn" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-btn" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-btn" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+          <a href="#" class="social-btn" aria-label="Youtube"><i class="fab fa-youtube"></i></a>
+        </div>
+        <div class="footer-contact-info">
+          <p><i class="fas fa-phone footer-contact-icon"></i>1800 1234</p>
+          <p class="footer-contact-item"><i class="fas fa-envelope footer-contact-icon"></i>contact@nhanam.vn</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Nhã Nam Books. Thiết kế với ❤️ tại Việt Nam</p>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

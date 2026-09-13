@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel — Nhã Nam Books</title>
+  <link rel="stylesheet" href="css/admin.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+
+<!-- ═══════════════════ SIDEBAR ═══════════════════ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">
+      <span class="logo-emoji">📚</span>
+      <div class="logo-text">
+        <span class="logo-title">Nhã Nam</span>
+        <span class="logo-sub">Admin Panel</span>
+      </div>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section">
+      <span class="nav-section-label">Tổng quan</span>
+      <a href="#" class="nav-link active" data-section="dashboard"
+         onclick="showSection('dashboard'); return false;">
+        <i class="fas fa-chart-pie"></i>
+        <span>Dashboard</span>
+      </a>
+    </div>
+
+    <div class="nav-section">
+      <span class="nav-section-label">Quản lý</span>
+      <a href="#" class="nav-link" data-section="books"
+         onclick="showSection('books'); return false;">
+        <i class="fas fa-book"></i>
+        <span>Quản lý sách</span>
+        <span class="nav-badge" id="navBadgeBooks">0</span>
+      </a>
+      <a href="#" class="nav-link" data-section="categories"
+         onclick="showSection('categories'); return false;">
+        <i class="fas fa-tags"></i>
+        <span>Quản lý danh mục</span>
+      </a>
+      <a href="#" class="nav-link" data-section="accounts"
+         onclick="showSection('accounts'); return false;">
+        <i class="fas fa-users"></i>
+        <span>Quản lý tài khoản</span>
+      </a>
+      <a href="#" class="nav-link" data-section="orders"
+         onclick="showSection('orders'); return false;">
+        <i class="fas fa-shopping-bag"></i>
+        <span>Quản lý đơn hàng</span>
+        <span class="nav-badge pending-badge" id="navBadgeOrders">0</span>
+      </a>
+    </div>
+
+    <div class="nav-section">
+      <span class="nav-section-label">Hệ thống</span>
+      <a href="../user/index.html" target="_blank" class="nav-link">
+        <i class="fas fa-store"></i>
+        <span>Xem cửa hàng</span>
+        <i class="fas fa-external-link-alt nav-ext"></i>
+      </a>
+      <a href="#" class="nav-link nav-logout" onclick="adminLogout(); return false;">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Đăng xuất</span>
+      </a>
+    </div>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="admin-avatar" id="adminAvatar">A</div>
+    <div class="admin-info">
+      <div class="admin-name" id="adminName">Admin</div>
+      <div class="admin-role">Quản trị viên</div>
+    </div>
+  </div>
+</aside>
+
+<!-- ═══════════════════ MAIN CONTENT ═══════════════════ -->
+<div class="admin-main" id="adminMain">
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="sidebar-toggle-btn" onclick="toggleSidebar()" aria-label="Đóng mở thanh bên">
+        <i class="fas fa-bars"></i>
+      </button>
+      <h1 class="page-title" id="pageTitle">📊 Dashboard</h1>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-clock">
+        <i class="fas fa-clock"></i>
+        <span id="adminClock"></span>
+      </div>
+      <a href="../user/index.html" target="_blank" class="topbar-store-btn">
+        <i class="fas fa-store"></i> Cửa hàng
+      </a>
+    </div>
+  </header>
+
+  <!-- ──────────────── SECTION: DASHBOARD ──────────────── -->
+  <section class="admin-section active" id="sec-dashboard">
+
+    <!-- Stat Cards -->
+    <div class="stat-cards">
+      <div class="stat-card blue">
+        <div class="stat-icon"><i class="fas fa-book"></i></div>
+        <div class="stat-body">
+          <div class="stat-value" id="statBooks">—</div>
+          <div class="stat-label">Tổng số sách</div>
+        </div>
+        <div class="stat-trend"><i class="fas fa-arrow-up"></i></div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-icon"><i class="fas fa-users"></i></div>
+        <div class="stat-body">
+          <div class="stat-value" id="statUsers">—</div>
+          <div class="stat-label">Khách hàng</div>
+        </div>
+        <div class="stat-trend"><i class="fas fa-arrow-up"></i></div>
+      </div>
+      <div class="stat-card orange">
+        <div class="stat-icon"><i class="fas fa-shopping-bag"></i></div>
+        <div class="stat-body">
+          <div class="stat-value" id="statOrders">—</div>
+          <div class="stat-label">Tổng đơn hàng</div>
+        </div>
+        <div class="stat-trend"><i class="fas fa-arrow-up"></i></div>
+      </div>
+      <div class="stat-card red">
+        <div class="stat-icon"><i class="fas fa-coins"></i></div>
+        <div class="stat-body">
+          <div class="stat-value" id="statRevenue"></div>
+          <div class="stat-label">Doanh thu (done)</div>
+        </div>
+        <div class="stat-trend"><i class="fas fa-arrow-up"></i></div>
+      </div>
+      <div class="stat-card purple">
+        <div class="stat-icon"><i class="fas fa-tags"></i></div>
+        <div class="stat-body">
+          <div class="stat-value" id="statCats">—</div>
+          <div class="stat-label">Danh mục</div>
+        </div>
+      </div>
+      <div class="stat-card yellow">
+        <div class="stat-icon"><i class="fas fa-clock"></i></div>
+        <div class="stat-body">
+          <div class="stat-value" id="statPending">—</div>
+          <div class="stat-label">Chờ xác nhận</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dashboard Grid -->
+    <div class="dashboard-grid">
+      <!-- Recent Orders -->
+      <div class="panel">
+        <div class="panel-header">
+          <h3><i class="fas fa-receipt"></i> Đơn hàng gần đây</h3>
+          <button class="panel-link" onclick="showSection('orders')">Xem tất cả →</button>
+        </div>
+        <div class="table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Mã ĐH</th>
+                <th>Khách hàng</th>
+                <th>Sản phẩm</th>
+                <th>Tổng tiền</th>
+                <th>Ngày đặt</th>
+                <th>Trạng thái</th>
+              </tr>
+            </thead>
+            <tbody id="recentOrdersBody">
+              <tr><td colspan="6" class="loading-cell"><i class="fas fa-spinner fa-spin"></i> Đang tải...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Right column -->
+      <div class="dashboard-right">
+        <!-- Top Books -->
+        <div class="panel">
+          <div class="panel-header">
+            <h3><i class="fas fa-fire"></i> Sách bán chạy</h3>
+            <button class="panel-link" onclick="showSection('books')">Xem tất cả →</button>
+          </div>
+          <div id="topBooksContainer" class="top-books-list"></div>
+        </div>
+
+        <!-- Order Status Chart -->
+        <div class="panel">
+          <div class="panel-header">
+            <h3><i class="fas fa-chart-bar"></i> Tình trạng đơn hàng</h3>
+          </div>
+          <div id="orderStatusChart" class="chart-container"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ──────────────── SECTION: BOOKS ──────────────── -->
+  <section class="admin-section" id="sec-books">
+    <div class="section-toolbar">
+      <div class="toolbar-filters">
+        <div class="search-wrap">
+          <i class="fas fa-search"></i>
+          <input type="text" id="bookSearchInput" placeholder="Tìm tên sách, tác giả..."
+            oninput="renderBooks()" />
+        </div>
+        <select id="bookCatFilter" class="filter-select" onchange="renderBooks()" aria-label="Lọc theo danh mục sách">
+          <option value="all">Tất cả danh mục</option>
+        </select>
+      </div>
+      <button class="btn-add-new" onclick="openBookModal()">
+        <i class="fas fa-plus"></i> Thêm sách mới
+      </button>
+    </div>
+
+    <div class="panel">
+      <div class="table-wrap">
+        <table class="admin-table" id="booksTable">
+          <thead>
+            <tr>
+              <th class="col-id">ID</th>
+              <th class="col-thumb">Ảnh</th>
+              <th>Tên sách</th>
+              <th>Danh mục</th>
+              <th>Giá bán</th>
+              <th>Tồn kho</th>
+              <th>Nhãn</th>
+              <th class="col-action">Thao tác</th>
+            </tr>
+          </thead>
+          <tbody id="booksTableBody">
+            <tr><td colspan="8" class="loading-cell"><i class="fas fa-spinner fa-spin"></i> Đang tải...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ──────────────── SECTION: CATEGORIES ──────────────── -->
+  <section class="admin-section" id="sec-categories">
+    <div class="section-toolbar">
+      <div class="toolbar-filters">
+        <h3 class="summary-title">Tổng cộng: <span id="catTotal">0</span> danh mục</h3>
+      </div>
+      <button class="btn-add-new" onclick="openCategoryModal()">
+        <i class="fas fa-plus"></i> Thêm danh mục
+      </button>
+    </div>
+
+    <div class="panel">
+      <div class="table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th class="col-id">ID</th>
+              <th>Tên danh mục</th>
+              <th>Slug</th>
+              <th>Mô tả</th>
+              <th>Số sách</th>
+              <th class="col-action">Thao tác</th>
+            </tr>
+          </thead>
+          <tbody id="categoriesTableBody">
+            <tr><td colspan="6" class="loading-cell"><i class="fas fa-spinner fa-spin"></i> Đang tải...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ──────────────── SECTION: ACCOUNTS ──────────────── -->
+  <section class="admin-section" id="sec-accounts">
+    <div class="section-toolbar">
+      <div class="toolbar-filters">
+        <div class="search-wrap">
+          <i class="fas fa-search"></i>
+          <input type="text" id="userSearchInput" placeholder="Tìm tên, email..."
+            oninput="renderAccounts()" />
+        </div>
+        <select id="userRoleFilter" class="filter-select" onchange="renderAccounts()" aria-label="Lọc theo vai trò người dùng">
+          <option value="all">Tất cả vai trò</option>
+          <option value="admin">Admin</option>
+          <option value="user">User</option>
+        </select>
+      </div>
+      <button class="btn-add-new" onclick="openAccountModal()">
+        <i class="fas fa-plus"></i> Thêm tài khoản
+      </button>
+    </div>
+
+    <div class="panel">
+      <div class="table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th class="col-id">ID</th>
+              <th>Họ tên</th>
+              <th>Email</th>
+              <th>SĐT</th>
+              <th>Vai trò</th>
+              <th>Trạng thái</th>
+              <th class="col-action-lg">Thao tác</th>
+            </tr>
+          </thead>
+          <tbody id="accountsTableBody">
+            <tr><td colspan="7" class="loading-cell"><i class="fas fa-spinner fa-spin"></i> Đang tải...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ──────────────── SECTION: ORDERS ──────────────── -->
+  <section class="admin-section" id="sec-orders">
+    <div class="section-toolbar">
+      <div class="toolbar-filters">
+        <div class="search-wrap">
+          <i class="fas fa-search"></i>
+          <input type="text" id="orderSearchInput" placeholder="Tìm tên, mã đơn, SĐT..."
+            oninput="renderOrders()" />
+        </div>
+        <select id="orderStatusFilter" class="filter-select" onchange="renderOrders()" aria-label="Lọc theo trạng thái đơn hàng">
+          <option value="all">Tất cả trạng thái</option>
+          <option value="pending">Chờ xác nhận</option>
+          <option value="processing">Đang xử lý</option>
+          <option value="shipping">Đang giao</option>
+          <option value="done">Hoàn thành</option>
+          <option value="cancelled">Đã huỷ</option>
+        </select>
+      </div>
+      <button class="btn-add-new" onclick="openAddOrderModal()">
+        <i class="fas fa-plus"></i> Thêm đơn hàng
+      </button>
+    </div>
+
+    <div class="panel">
+      <div class="table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th class="col-order-id">Mã ĐH</th>
+              <th>Khách hàng</th>
+              <th>Sản phẩm</th>
+              <th>Tổng tiền</th>
+              <th>Ngày đặt</th>
+              <th class="col-status">Trạng thái</th>
+              <th class="col-action-sm">Thao tác</th>
+            </tr>
+          </thead>
+          <tbody id="ordersTableBody">
+            <tr><td colspan="7" class="loading-cell"><i class="fas fa-spinner fa-spin"></i> Đang tải...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+</div><!-- end admin-main -->
+
+<!-- ══════════════════════════════════════════
+     MODAL BACKDROP
+     ══════════════════════════════════════════ -->
+<div class="modal-backdrop" id="modalBackdrop" onclick="closeAllModals()"></div>
+
+<!-- ══════════════════════════════════════════
+     MODAL: THÊM / SỬA SÁCH
+     ══════════════════════════════════════════ -->
+<div class="modal-box" id="bookModal">
+  <div class="modal-header">
+    <h3 id="bookModalTitle">Thêm sách mới</h3>
+    <button class="modal-close-btn" onclick="closeModal('bookModal')" aria-label="Đóng cửa sổ">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form id="bookForm" onsubmit="return false">
+      <div class="form-row-2">
+        <div class="form-field">
+          <label>Tên sách <span class="req">*</span></label>
+          <input type="text" id="bkTitle" placeholder="Nhập tên sách..." required />
+        </div>
+        <div class="form-field">
+          <label>Tác giả <span class="req">*</span></label>
+          <input type="text" id="bkAuthor" placeholder="Tên tác giả..." required />
+        </div>
+      </div>
+
+      <div class="form-row-2">
+        <div class="form-field">
+          <label for="bkCategoryId">Danh mục <span class="req">*</span></label>
+          <select id="bkCategoryId"></select>
+        </div>
+        <div class="form-field">
+          <label for="bkStock">Tồn kho</label>
+          <input type="number" id="bkStock" value="10" min="0" />
+        </div>
+      </div>
+
+      <div class="form-row-2">
+        <div class="form-field">
+          <label>Giá bán (VNĐ) <span class="req">*</span></label>
+          <input type="number" id="bkPrice" placeholder="79000" min="0" required />
+        </div>
+        <div class="form-field">
+          <label>Giá gốc (VNĐ)</label>
+          <input type="number" id="bkOriginalPrice" placeholder="99000" min="0" />
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label>Link ảnh bìa (URL)</label>
+        <input type="url" id="bkCover" placeholder="https://..." />
+      </div>
+
+      <div class="form-field">
+        <label>Mô tả sách</label>
+        <textarea id="bkDescription" rows="3" placeholder="Nhập mô tả ngắn về sách..."></textarea>
+      </div>
+
+      <div class="form-row-2">
+        <label class="checkbox-label">
+          <input type="checkbox" id="bkIsNew" />
+          <span class="checkmark"></span>
+          Sách mới <span class="mini-badge badge-new">MỚI</span>
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" id="bkIsSale" />
+          <span class="checkmark"></span>
+          Đang sale <span class="mini-badge badge-sale">SALE</span>
+        </label>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn-cancel" onclick="closeModal('bookModal')">Huỷ</button>
+    <button class="btn-save" id="saveBookBtn" onclick="saveBook()">
+      <i class="fas fa-save"></i> Lưu sách
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     MODAL: THÊM / SỬA DANH MỤC
+     ══════════════════════════════════════════ -->
+<div class="modal-box modal-sm" id="catModal">
+  <div class="modal-header">
+    <h3 id="catModalTitle">Thêm danh mục mới</h3>
+    <button class="modal-close-btn" onclick="closeModal('catModal')" aria-label="Đóng">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form id="catForm" onsubmit="return false">
+      <div class="form-field">
+        <label>Tên danh mục <span class="req">*</span></label>
+        <input type="text" id="catName" placeholder="VD: Văn học" required />
+      </div>
+      <div class="form-field">
+        <label>Slug <span class="req">*</span></label>
+        <input type="text" id="catSlug" placeholder="VD: van-hoc" required />
+        <small class="form-hint">Tự động tạo từ tên, dùng để lọc URL</small>
+      </div>
+      <div class="form-field">
+        <label>Mô tả</label>
+        <textarea id="catDesc" rows="2" placeholder="Mô tả ngắn về danh mục..."></textarea>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn-cancel" onclick="closeModal('catModal')">Huỷ</button>
+    <button class="btn-save" id="saveCatBtn" onclick="saveCategory()">
+      <i class="fas fa-save"></i> Lưu
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     MODAL: THÊM / SỬA TÀI KHOẢN
+     ══════════════════════════════════════════ -->
+<div class="modal-box" id="accModal">
+  <div class="modal-header">
+    <h3 id="accModalTitle">Thêm tài khoản mới</h3>
+    <button class="modal-close-btn" onclick="closeModal('accModal')" aria-label="Đóng">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form id="accForm" onsubmit="return false">
+      <div class="form-row-2">
+        <div class="form-field">
+          <label>Họ và tên <span class="req">*</span></label>
+          <input type="text" id="accName" placeholder="Nguyễn Văn A" required />
+        </div>
+        <div class="form-field">
+          <label>Email <span class="req">*</span></label>
+          <input type="email" id="accEmail" placeholder="email@gmail.com" required />
+        </div>
+      </div>
+      <div class="form-row-2">
+        <div class="form-field">
+          <label>Số điện thoại</label>
+          <input type="tel" id="accPhone" placeholder="09xxxxxxxx" />
+        </div>
+        <div class="form-field">
+          <label for="accRole">Vai trò</label>
+          <select id="accRole">
+            <option value="user">👤 User</option>
+            <option value="admin">👑 Admin</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-field">
+        <label>Địa chỉ</label>
+        <input type="text" id="accAddress" placeholder="Địa chỉ..." />
+      </div>
+      <div class="form-field">
+        <label>Mật khẩu <span class="req">*</span></label>
+        <div class="password-wrapper">
+          <input type="password" id="accPassword" placeholder="Tối thiểu 6 ký tự"/>
+          <button type="button" aria-label="Ẩn/hiện mật khẩu"
+            onclick="const i=document.getElementById('accPassword');i.type=i.type==='password'?'text':'password';this.querySelector('i').className='fas fa-eye'+(i.type==='text'?'-slash':'')">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn-cancel" onclick="closeModal('accModal')">Huỷ</button>
+    <button class="btn-save" id="saveAccBtn" onclick="saveAccount()">
+      <i class="fas fa-save"></i> Lưu
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     MODAL: CHI TIẾT ĐƠN HÀNG
+     ══════════════════════════════════════════ -->
+<div class="modal-box modal-lg" id="orderDetailModal">
+  <div class="modal-header">
+    <h3 id="orderDetailTitle">Chi tiết đơn hàng</h3>
+    <button class="modal-close-btn" onclick="closeModal('orderDetailModal')" aria-label="Đóng"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="modal-body" id="orderDetailBody"></div>
+  <div class="modal-footer">
+    <button class="btn-save" onclick="closeModal('orderDetailModal')">
+      <i class="fas fa-check"></i> Đóng
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     MODAL: THÊM ĐƠN HÀNG MỚI
+     ══════════════════════════════════════════ -->
+<div class="modal-box modal-lg" id="addOrderModal">
+  <div class="modal-header">
+    <h3 id="addOrderModalTitle">Thêm đơn hàng mới</h3>
+    <button class="modal-close-btn" onclick="closeModal('addOrderModal')" aria-label="Đóng"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="modal-body">
+    <form id="addOrderForm" onsubmit="return false">
+      <h4 class="form-section-title"><i class="fas fa-user"></i> Thông tin khách hàng</h4>
+      <div class="form-row-2">
+        <div class="form-field">
+          <label>Họ tên <span class="req">*</span></label>
+          <input type="text" id="aoName" placeholder="Tên khách hàng" required />
+        </div>
+        <div class="form-field">
+          <label>Số điện thoại</label>
+          <input type="tel" id="aoPhone" placeholder="09xxxxxxxx" />
+        </div>
+      </div>
+      <div class="form-row-2">
+        <div class="form-field">
+          <label>Email</label>
+          <input type="email" id="aoEmail" placeholder="email@gmail.com" />
+        </div>
+        <div class="form-field">
+          <label for="aoStatus">Trạng thái đơn hàng</label>
+          <select id="aoStatus">
+            <option value="pending">Chờ xác nhận</option>
+            <option value="processing">Đang xử lý</option>
+            <option value="shipping">Đang giao</option>
+            <option value="done">Hoàn thành</option>
+            <option value="cancelled">Đã huỷ</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-field">
+        <label>Địa chỉ giao hàng <span class="req">*</span></label>
+        <input type="text" id="aoAddress" placeholder="Số nhà, tên đường, quận/huyện, tỉnh/thành" required />
+      </div>
+      <div class="form-field">
+        <label>Ghi chú</label>
+        <input type="text" id="aoNote" placeholder="Ghi chú thêm..." />
+      </div>
+
+      <h4 class="form-section-title">
+        <i class="fas fa-book"></i> Danh sách sách
+        <button type="button" class="btn-add-item" onclick="addOrderItem()">
+          <i class="fas fa-plus"></i> Thêm sách
+        </button>
+      </h4>
+      <div id="orderItemsContainer"></div>
+
+      <div class="order-total-row">
+        <span>Tổng cộng:</span>
+        <strong id="addOrderTotal">0 ₫</strong>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn-cancel" onclick="closeModal('addOrderModal')">Huỷ</button>
+    <button class="btn-save" id="saveOrderBtn" onclick="saveNewOrder()">
+      <i class="fas fa-save"></i> Lưu đơn hàng
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     CONFIRM DELETE DIALOG
+     ══════════════════════════════════════════ -->
+<div class="confirm-dialog" id="confirmDialog">
+  <div class="confirm-icon"><i class="fas fa-exclamation-triangle"></i></div>
+  <h3>Xác nhận xoá</h3>
+  <p id="confirmMsg">Bạn có chắc chắn muốn xoá không?</p>
+  <div class="confirm-btns">
+    <button class="btn-cancel" onclick="closeConfirm()">Huỷ bỏ</button>
+    <button class="btn-danger" id="confirmOkBtn">
+      <i class="fas fa-trash"></i> Xoá
+    </button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="admin-toast" id="adminToast"></div>
+
+<script src="js/config.js"></script>
+<script src="js/admin.js"></script>
+<script>
+  // Update nav badges after data loads
+  window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+      const b1 = document.getElementById('navBadgeBooks');
+      const b2 = document.getElementById('navBadgeOrders');
+      if (b1) b1.textContent = allBooks.length;
+      if (b2) {
+        const pendingCount = allOrders.filter(o => o.status === 'pending').length;
+        b2.textContent = pendingCount;
+        b2.style.display = pendingCount > 0 ? 'flex' : 'none';
+      }
+      // Update category total
+      const ct = document.getElementById('catTotal');
+      if (ct) ct.textContent = allCategories.length;
+      // Set admin avatar
+      const av = document.getElementById('adminAvatar');
+      if (av && adminUser) av.textContent = adminUser.name.charAt(0).toUpperCase();
+    }, 800);
+  });
+
+  function closeAllModals() {
+    document.querySelectorAll('.modal-box').forEach(m => m.classList.remove('open'));
+    document.getElementById('confirmDialog')?.classList.remove('open');
+    document.getElementById('modalBackdrop').classList.remove('open');
+  }
+</script>
+</body>
+</html>

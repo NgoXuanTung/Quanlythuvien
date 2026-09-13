@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thanh Toán — Nhã Nam Books</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+<header class="site-header">
+  <div class="header-main-row">
+    <div class="container">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">📚</span>
+        <div><div class="logo-name">Nhã Nam</div><div class="logo-sub">Books</div></div>
+      </a>
+      <!-- Checkout progress -->
+      <div style="display:flex;align-items:center;gap:8px;font-size:.82rem;color:var(--gray-400);margin:0 auto">
+        <span>🛒 Giỏ hàng</span> → <span style="color:var(--amber);font-weight:600">📋 Thanh toán</span> → <span>✅ Hoàn thành</span>
+      </div>
+      <a href="cart.html" style="font-size:.85rem;color:var(--gray-400)">← Giỏ hàng</a>
+    </div>
+  </div>
+</header>
+
+<div class="page-hero">
+  <div class="container">
+    <h1><i class="fas fa-credit-card" style="color:var(--amber);margin-right:12px"></i>Thông Tin Thanh Toán</h1>
+    <p>Điền thông tin để hoàn tất đơn hàng</p>
+  </div>
+</div>
+
+<main>
+  <div class="container">
+    <div class="checkout-layout">
+      <!-- FORM - Người 4 -->
+      <div class="checkout-form-card">
+        <h2><i class="fas fa-map-marker-alt" style="color:var(--amber);margin-right:8px"></i>Địa Chỉ Giao Hàng</h2>
+        <form onsubmit="handleCheckout(event)">
+          <div class="form-row-2">
+            <div class="form-group">
+              <label>Họ và tên <span>*</span></label>
+              <input type="text" id="shipName" required placeholder="Nguyễn Văn A" />
+            </div>
+            <div class="form-group">
+              <label>Số điện thoại <span>*</span></label>
+              <input type="tel" id="shipPhone" required placeholder="09xxxxxxxx" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Email <span>*</span></label>
+            <input type="email" id="shipEmail" required placeholder="email@gmail.com" />
+          </div>
+          <div class="form-group">
+            <label>Địa chỉ nhận hàng <span>*</span></label>
+            <input type="text" id="shipAddress" required placeholder="Số nhà, tên đường, phường/xã, quận/huyện, tỉnh/thành" />
+          </div>
+          <div class="form-group">
+            <label>Ghi chú đơn hàng</label>
+            <textarea id="shipNote" placeholder="Ghi chú cho người giao hàng (không bắt buộc)..."></textarea>
+          </div>
+
+          <h2 style="margin-top:24px;padding-top:20px;border-top:1px solid var(--gray-200)">
+            <i class="fas fa-credit-card" style="color:var(--amber);margin-right:8px"></i>Phương Thức Thanh Toán
+          </h2>
+          <div style="display:flex;flex-direction:column;gap:10px;margin-top:14px">
+            <label class="payment-option" style="display:flex;align-items:center;gap:12px;padding:14px;border:2px solid var(--amber);border-radius:8px;cursor:pointer;background:#faf6ef">
+              <input type="radio" name="payment" value="cod" checked />
+              <span>💵</span>
+              <div><strong style="font-size:.9rem">Thanh toán khi nhận hàng (COD)</strong>
+              <p style="font-size:.78rem;color:var(--gray-400)">Thanh toán bằng tiền mặt khi nhận hàng</p></div>
+            </label>
+            <label class="payment-option" style="display:flex;align-items:center;gap:12px;padding:14px;border:1px solid var(--gray-200);border-radius:8px;cursor:pointer">
+              <input type="radio" name="payment" value="bank" />
+              <span>🏦</span>
+              <div><strong style="font-size:.9rem">Chuyển khoản ngân hàng</strong>
+              <p style="font-size:.78rem;color:var(--gray-400)">MB Bank - STK: 1234567890 - Nhã Nam Books</p></div>
+            </label>
+          </div>
+
+          <button type="submit" class="btn-place-order" id="placeOrderBtn">
+            <i class="fas fa-check-circle"></i> Đặt Hàng Ngay
+          </button>
+        </form>
+      </div>
+
+      <!-- ORDER SUMMARY -->
+      <div class="checkout-summary-card">
+        <h3><i class="fas fa-receipt" style="color:var(--amber);margin-right:8px"></i>Đơn Hàng Của Bạn</h3>
+        <div id="checkoutItems">
+          <div style="text-align:center;padding:30px;color:var(--gray-400)">
+            <i class="fas fa-spinner fa-spin"></i> Đang tải...
+          </div>
+        </div>
+        <div style="margin-top:16px;padding:12px;background:var(--gray-100);border-radius:8px;font-size:.8rem;color:var(--gray-600)">
+          <i class="fas fa-shield-alt" style="color:var(--forest);margin-right:6px"></i>
+          Thông tin của bạn được bảo mật tuyệt đối
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+<script src="js/config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/checkout.js"></script>
+<script>window.addEventListener('DOMContentLoaded', initCheckout);</script>
+</body>
+</html>
